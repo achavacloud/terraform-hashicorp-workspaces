@@ -33,10 +33,13 @@ resource "tfe_workspace" "workspace" {
 
 # Conditionally create the run trigger
 resource "tfe_run_trigger" "run_trigger" {
-  count = var.enable_run_trigger && var.source_workspace_id != null && var.target_workspace_id != null ? 1 : 0
+  for_each = var.enable_run_trigger && var.source_workspace_id != null ? {
+    "run_trigger": var.source_workspace_id
+  } : {}
 
   workspace_id       = tfe_workspace.workspace.id
-  sourceable_id      = var.source_workspace_id
+  source_workspace_id = each.value
 
+  # Ensure that the workspace is created before the run trigger
   depends_on = [tfe_workspace.workspace]
 }
