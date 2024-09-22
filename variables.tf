@@ -84,14 +84,18 @@ variable "tags" {
   default     = []
 }
 
+# Variable for source workspace ID (optional)
 variable "source_workspace_id" {
-  description = "Source workspace ID that will trigger the run"
+  description = "The ID of the source workspace that will trigger the current workspace"
   type        = string
+  default     = null
 }
 
+# Variable for target workspace ID (optional)
 variable "target_workspace_id" {
-  description = "Target workspace ID that will be triggered"
+  description = "The ID of the target workspace that will be triggered by the source workspace"
   type        = string
+  default     = null
 }
 
 variable "enable_run_trigger" {
