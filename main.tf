@@ -31,14 +31,22 @@ resource "tfe_workspace" "workspace" {
   depends_on = [tfe_project.project]
 }
 
-resource "tfe_run_trigger" "run_trigger" {
-  for_each = var.enable_run_trigger && var.source_workspace_id != null ? {
-    "run_trigger": var.source_workspace_id
-  } : {}
+resource "null_resource" "run_trigger_dependency" {
+  count = var.enable_run_trigger ? 1 : 0
 
-  workspace_id  = tfe_workspace.workspace.id
-  sourceable_id = each.value
+  triggers = {
+    workspace_id        = tfe_workspace.workspace.id
+    source_workspace_id = var.source_workspace_id
+  }
 
-  # Ensure that the workspace is created before the run trigger
   depends_on = [tfe_workspace.workspace]
+}
+
+resource "tfe_run_trigger" "run_trigger" {
+  count = var.enable_run_trigger ? 1 : 0
+
+  workspace_id       = tfe_workspace.workspace.id
+  sourceable_id      = null_resource.run_trigger_dependency[0].triggers["source_workspace_id"]
+
+  depends_on = [null_resource.run_trigger_dependency]
 }
