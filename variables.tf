@@ -83,3 +83,19 @@ variable "tags" {
   type        = list(string)
   default     = []
 }
+
+variable "source_workspace_id" {
+  description = "Source workspace ID that will trigger the run"
+  type        = string
+}
+
+variable "target_workspace_id" {
+  description = "Target workspace ID that will be triggered"
+  type        = string
+}
+
+variable "enable_run_trigger" {
+  description = "Flag to enable or disable run triggers"
+  type        = bool
+  default     = false
+}

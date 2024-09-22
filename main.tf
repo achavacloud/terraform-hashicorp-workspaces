@@ -28,3 +28,10 @@ resource "tfe_workspace" "workspace" {
   project_id                    = local.project_id
   tag_names                     = var.tags
 }
+
+# Conditionally create the run trigger
+resource "tfe_run_trigger" "run_trigger" {
+  count              = var.enable_run_trigger ? 1 : 0
+  workspace_id       = var.target_workspace_id
+  sourceable_id      = var.source_workspace_id
+}
