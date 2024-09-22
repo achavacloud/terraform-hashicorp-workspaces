@@ -5,8 +5,14 @@ resource "tfe_project" "project" {
   name         = var.project_name
 }
 
+data "tfe_project" "existing_project" {
+  count        = var.create_project ? 0 : 1
+  organization = var.organization
+  name         = var.project_name
+}
+
 locals {
-  project_id = var.create_project ? tfe_project.project[0].id : var.existing_project_id
+  project_id = var.create_project ? tfe_project.project[0].id : data.tfe_project.existing_project[0].id
 }
 
 resource "tfe_workspace" "workspace" {
@@ -28,7 +34,7 @@ resource "tfe_workspace" "workspace" {
   project_id                    = local.project_id
   tag_names                     = var.tags
 
-  depends_on = [tfe_project.project]
+  depends_on = var.create_project ? [tfe_project.project] : []
 }
 
 resource "null_resource" "run_trigger_dependency" {
