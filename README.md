@@ -17,7 +17,7 @@ This module provides a structured approach to managing Terraform workspaces and 
 
 ```sh
 terraform-hashicorp-workspace/
-├── main.tf          # Core resource definitions
+├── resource_group.tf          # Core resource definitions
 ├── variables.tf     # Input variable definitions
 ├── outputs.tf       # Output definitions
 └── terraform.tfvars # (Optional) Default variable values  
