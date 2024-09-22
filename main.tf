@@ -27,6 +27,8 @@ resource "tfe_workspace" "workspace" {
   structured_run_output_enabled = var.structured_run_output_enabled
   project_id                    = local.project_id
   tag_names                     = var.tags
+
+  depends_on = [tfe_project.project]
 }
 
 # Conditionally create the run trigger
@@ -35,4 +37,6 @@ resource "tfe_run_trigger" "run_trigger" {
 
   workspace_id       = tfe_workspace.workspace.id
   sourceable_id      = var.source_workspace_id
+
+  depends_on = [tfe_workspace.workspace]
 }
