@@ -34,7 +34,8 @@ resource "tfe_workspace" "workspace" {
   project_id                    = local.project_id
   tag_names                     = var.tags
 
-  depends_on = var.create_project ? [tfe_project.project] : []
+  depends_on = [tfe_project.project
+  ]
 }
 
 resource "null_resource" "run_trigger_dependency" {
